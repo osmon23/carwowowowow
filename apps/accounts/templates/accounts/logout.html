@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-md-6">
+      <h2 class="text-center">Выход</h2>
+      <p class="text-center">Вы действительно хотите выйти?</p>
+      <form method="post" class="mt-4">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger btn-block">Да</button>
+      </form>
+    </div>
+  </div>
+</div>
+{% endblock %}

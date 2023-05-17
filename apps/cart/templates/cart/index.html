@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block title %}
+Cart
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <h1>Корзина</h1>
+    <table class="table">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Название товара</th>
+            <th scope="col">Цена</th>
+            <th scope="col">Количество</th>
+            <th scope="col">Сумма</th>
+            <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for item in cart.cart_items.all %}
+        <tr>
+            <td scope="row">{{ forloop.counter }}</td>
+            <td>{{ item.product.name }}</td>
+            <td>{{ item.product.price }}</td>
+            <td>{{ item.quantity }}</td>
+            <td>{{ item.total_price }}</td>
+            <td>
+                <form method="POST" action="{% url 'remove-from-cart' item.product.id %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">Удалить</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+    <div class="text-end">
+        <h5>Общая стоимость: {{ cart.total_price }}</h5>
+        <button class="btn btn-primary">Оформить заказ</button>
+    </div>
+</div>
+{% endblock %}

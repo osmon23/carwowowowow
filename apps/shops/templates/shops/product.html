@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% block title %}
+Detail Product
+{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="row">
+        <div class="col-lg-6">
+            <div id="product-images" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-indicators">
+                    {% for image in product.images.all %}
+                    <button type="button" data-bs-target="#product-images" data-bs-slide-to="{{ forloop.counter0 }}"
+                            {% if forloop.first %}class="active" {% endif %}
+                            aria-current="{% if forloop.first %}true{% else %}false{% endif %}"
+                            aria-label="{{ image.product.name }} {{ forloop.counter0 }}"></button>
+                    {% endfor %}
+                </div>
+                <div class="carousel-inner">
+                    {% for image in product.images.all %}
+                    <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                        <img src="{{ image.image }}" class="d-block w-100" alt="{{ image.product.name }}">
+                    </div>
+                    {% endfor %}
+                </div>
+                <button class="carousel-control-prev" type="button" data-bs-target="#product-images"
+                        data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </button>
+                <button class="carousel-control-next" type="button" data-bs-target="#product-images"
+                        data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </button>
+            </div>
+        </div>
+        <div class="col-lg-6">
+            <h1 class="mb-4">{{ product.name }}</h1>
+            <p class="lead">{{ product.description }}</p>
+            <h2 class="my-4">{{ product.price }} {{ currency }}</h2>
+            <p class="mb-5">{{ product.quantity }} {{ _('в наличии') }}</p>
+            <div class="mt-4">
+                <h3>Характеристики:</h3>
+                <dl class="row">
+                    {% for specification in product.specifications.all %}
+                    <dt class="col-sm-3">{{ specification.name }}</dt>
+                    <dd class="col-sm-9">{{ specification.value }}</dd>
+                    {% endfor %}
+                </dl>
+            </div>
+            <form method="POST" action="{% url 'cart-add' product.id %}">
+                {% csrf_token %}
+                <input type="number" name="quantity" value="1" class="form-control mb-3" min="1">
+                <button type="submit" class="btn btn-primary">{{ _('Добавить в корзину') }}</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

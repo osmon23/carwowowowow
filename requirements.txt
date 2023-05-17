@@ -1,0 +1,6 @@
+django==4.2.1
+pillow==9.5.0
+django-debug-toolbar==4.0.0
+django-mptt==0.14.0
+psycopg2-binary==2.9.6
+decouple==0.0.7
