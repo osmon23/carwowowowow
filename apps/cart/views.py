@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.views import View
 from django.http import HttpResponseRedirect
 
@@ -9,7 +9,6 @@ from ..shops.models import Product
 
 
 class CartView(LoginRequiredMixin, View):
-    login_url = '/admin/login/'
 
     def get(self, request):
         cart = Cart.objects.prefetch_related('cart_items__product').get(owner=request.user)
@@ -17,7 +16,6 @@ class CartView(LoginRequiredMixin, View):
 
 
 class CardAddView(LoginRequiredMixin, View):
-    login_url = '/admin/login/'
 
     def post(self, request, product_id):
         cart, created = Cart.objects.get_or_create(owner=request.user)
@@ -27,7 +25,6 @@ class CardAddView(LoginRequiredMixin, View):
 
 
 class RemoveFromCartView(LoginRequiredMixin, View):
-    login_url = '/admin/login/'
 
     def post(self, request, product_id):
         cart = Cart.objects.get(owner=request.user)
@@ -39,3 +36,15 @@ class RemoveFromCartView(LoginRequiredMixin, View):
 
         cart.cart_items.filter(product=product).delete()
         return render(request, 'cart/index.html', {'cart': cart})
+
+
+def update_cart(request, product_id):
+    cart_item = get_object_or_404(CartItem, product_id=product_id, cart=request.user.cart)
+    if request.method == 'POST':
+        quantity = int(request.POST.get('quantity', 0))
+        if quantity > 0:
+            cart_item.quantity = quantity
+            cart_item.save()
+        else:
+            cart_item.delete()
+    return redirect('cart')

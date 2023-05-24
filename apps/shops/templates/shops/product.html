@@ -38,7 +38,7 @@ Detail Product
         <div class="col-lg-6">
             <h1 class="mb-4">{{ product.name }}</h1>
             <p class="lead">{{ product.description }}</p>
-            <h2 class="my-4">{{ product.price }} {{ currency }}</h2>
+            <h2 class="my-4">$ {{ product.price }} {{ currency }}</h2>
             <p class="mb-5">{{ product.quantity }} {{ _('в наличии') }}</p>
             <div class="mt-4">
                 <h3>Характеристики:</h3>
@@ -51,7 +51,7 @@ Detail Product
             </div>
             <form method="POST" action="{% url 'cart-add' product.id %}">
                 {% csrf_token %}
-                <input type="number" name="quantity" value="1" class="form-control mb-3" min="1">
+                <input type="number" name="quantity" value="1" class="form-control mb-3" min="1" style="width: 70px;">
                 <button type="submit" class="btn btn-primary">{{ _('Добавить в корзину') }}</button>
             </form>
         </div>

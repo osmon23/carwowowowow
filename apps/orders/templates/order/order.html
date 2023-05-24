@@ -1,11 +1,11 @@
 {% extends 'base.html' %}
 {% block title %}
-Cart
+Order
 {% endblock %}
 
 {% block content %}
 <div class="container">
-    <h1>Корзина</h1>
+    <h1>Заказ</h1>
     <table class="table">
         <thead>
         <tr>
@@ -18,24 +18,15 @@ Cart
         </tr>
         </thead>
         <tbody>
-        {% for item in cart.cart_items.all %}
+        {% for item in order.order_items.all %}
         <tr>
             <td scope="row">{{ forloop.counter }}</td>
             <td>{{ item.product.name }}</td>
             <td>{{ item.product.price }}</td>
-            <td>
-                <form method="POST" action="{% url 'update-cart' item.product.id %}">
-                    {% csrf_token %}
-                    <div class="input-group">
-                        <input type="number" name="quantity" class="form-control" value="{{ item.quantity }}"
-                               style="width: 10px;">
-                        <button type="submit" class="btn btn-primary">Обновить</button>
-                    </div>
-                </form>
-            </td>
+            <td>{{ item.quantity }}</td>
             <td>{{ item.total_price }}</td>
             <td>
-                <form method="POST" action="{% url 'remove-from-cart' item.product.id %}">
+                <form method="POST" action="{% url 'remove-from-order' item.product.id %}">
                     {% csrf_token %}
                     <button type="submit" class="btn btn-danger">Удалить</button>
                 </form>
@@ -44,9 +35,12 @@ Cart
         {% endfor %}
         </tbody>
     </table>
+    <div class="order">
+        <input type="hidden" name="address">
+    </div>
     <div class="text-end">
-        <h5>Общая стоимость: {{ cart.total_price }}</h5>
-        <a class="btn btn-primary" href="{% url 'order' %}">Оформить заказ</a>
+        <h5>Общая стоимость заказа: {{ order.total_price }}</h5>
+        <button class="btn btn-primary">Заказать</button>
     </div>
 </div>
 {% endblock %}

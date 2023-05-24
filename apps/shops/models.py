@@ -50,7 +50,7 @@ class Product(models.Model):
     )
     quantity = models.PositiveIntegerField(
         _('Количество в наличий'),
-        default=0
+        default=1
     )
     category = models.ForeignKey(
         Category,
