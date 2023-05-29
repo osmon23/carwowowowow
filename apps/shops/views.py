@@ -15,4 +15,4 @@ class ProductView(View):
     def get(self, request, pk):
         product = Product.objects.get(pk=pk)
         categories = Category.objects.all()
-        return render(request, 'shops/product.html', {'product': product})
+        return render(request, 'shops/product.html', {'product': product, 'categories': categories})
